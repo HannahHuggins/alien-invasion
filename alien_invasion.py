@@ -1,5 +1,5 @@
-import sys
 import pygame
+import sys
 from ship import Ship
 from orca import Orca
 from settings import Settings
@@ -9,14 +9,14 @@ def run_game():
     # Initialize pygame, settings, and create a screen object.
     pygame.init()
     ai_settings = Settings()
-    screen = pygame.display.set_mode((1200, 800)
+    screen = pygame.display.set_mode(
         (ai_settings.screen_width, ai_settings.screen_height))
     pygame.display.set_caption("Alien Invasion")
 
     # Make a ship
-    ship = Ship(screen)
+    ship = Ship(ai_settings, screen)
     # Make an orca
-    orca = Orca(screen)
+    orca = Orca(ai_settings, screen)
 
     # Set the background color.
     bg_color = (0,255,170)
@@ -24,10 +24,11 @@ def run_game():
     # Start the main loop for the game.
     while True:
         gf.check_events(ship)
+        ship.update()
         gf.update_screen(ai_settings, screen, ship, orca)
 
         # Redraw the screen during each pass through the loop
-        screen.fill(ai_settings.bg_color)
+        # screen.fill([255,255,255])
 
         ship.blitme()
         orca.blitme()
