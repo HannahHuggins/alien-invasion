@@ -5,7 +5,14 @@ from pika import Pika
 from settings import Settings
 import game_functions as gf
 from pygame.sprite import Group
+from pygame import mixer
 
+
+mixer.init()
+
+pika_sound = mixer.Sound('sounds/poketheme.wav')
+
+pika_sound.play()
 
 
 
@@ -37,7 +44,7 @@ def run_game():
 
         gf.check_events(ai_settings, screen, ship, pika, bullets)
         ship.update()
-        gf.update_bullets(pikas, bullets)
+        gf.update_bullets(ai_settings, screen, ship, pikas, bullets)
         gf.update_pikas(ai_settings, pikas)
         gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets)
         # gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets)
@@ -47,12 +54,17 @@ def run_game():
         ship.blitme()
         pika.blitme()
 
+
         # Watch for keyboard and mouse events.
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
 
+
+
+
         # Make the most recently drawn screen visible.
         pygame.display.flip()
 
 run_game()
+pika_sound.play()

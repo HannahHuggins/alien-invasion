@@ -1,9 +1,10 @@
 import pygame
 from pygame.sprite import Sprite
 from pygame import mixer
-from random import randint
 
-mixer.init()
+
+
+
 class Pika(Sprite):
 
     def __init__(self, ai_settings, screen):
@@ -19,7 +20,7 @@ class Pika(Sprite):
 
         # Start each new pika near the top left of the screen
         self.screen_rect = screen.get_rect()
-
+ 
         self.rect.x = self.rect.width
         self.rect.y = self.rect.height
 
@@ -29,7 +30,7 @@ class Pika(Sprite):
 
     def __del__(self):
         pygame.mixer.init()
-        pika_sound = mixer.Sound('sounds/Pikachu.wav')
+        pika_sound = mixer.Sound('sounds/explosion.wav')
         pika_sound_two = mixer.Sound('sounds/pikachutwo.wav')
         pika_sound.play()
         # pika_sound_two.play()

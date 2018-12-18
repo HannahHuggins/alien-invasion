@@ -6,6 +6,8 @@ from settings import Settings
 from pika import Pika
 
 mixer.init()
+
+
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
     """ Respond to keypresses."""
     pygame.mixer.init()
@@ -17,7 +19,6 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
     elif event.key == pygame.K_LEFT:
         ship.center -= dist
         ship.moving_left = True
-
     elif event.key == pygame.K_SPACE:
         if len(bullets) < ai_settings.bullets_allowed:
             new_bullet = Bullet(ai_settings, screen, ship)
@@ -71,7 +72,7 @@ def update_screen(ai_settings, screen, ship, pika, pikas, bullets):
         bullet.draw_bullet()
 
 
-def update_bullets(pikas, bullets):
+def update_bullets(ai_settings, screen, ship, pikas, bullets):
     """ Update position of bullets and get rid of old bullets. """
     # Update bullet positions.
 
@@ -81,11 +82,20 @@ def update_bullets(pikas, bullets):
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
+
+    check_bullet_pikas_collision(ai_settings, screen, ship, pikas, bullets)
+
+def check_bullet_pikas_collision(ai_settings, screen, ship, pikas, bullets):
+    """Respond to bullet-pika collisions."""
+    # Remove any bullets and pikas that have collided.
     # Check for any bullets that have hit pikas.
     # If so, get rid of the bullet and the pika.
     collisions = pygame.sprite.groupcollide(bullets, pikas, True, True)
 
-        # pika_sound.play()
+    if len(pikas) == 0:
+        # Destroy exiting bullets and create new fleet.
+        bullets.empty()
+        create_fleet(ai_settings, screen, ship, pikas)
 
 def create_fleet(ai_settings, screen, ship, pikas):
     """Create a full fleet of pikas"""
