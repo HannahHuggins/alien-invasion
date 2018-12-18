@@ -7,6 +7,8 @@ import game_functions as gf
 from pygame.sprite import Group
 
 
+
+
 def run_game():
     # Initialize game, settings, and create a screen object.
     pygame.init()
@@ -32,12 +34,13 @@ def run_game():
     while True:
         screen.blit(background_image,[0,0])
 
+
         gf.check_events(ai_settings, screen, ship, pika, bullets)
         ship.update()
-        gf.update_bullets(bullets)
-        gf.update_pikas(pikas)
+        gf.update_bullets(pikas, bullets)
+        gf.update_pikas(ai_settings, pikas)
         gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets)
-        gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets)
+        # gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets)
 
         # Redraw the screen during each pass through the loop
 

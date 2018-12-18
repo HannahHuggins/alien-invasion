@@ -71,15 +71,21 @@ def update_screen(ai_settings, screen, ship, pika, pikas, bullets):
         bullet.draw_bullet()
 
 
-def update_bullets(bullets):
+def update_bullets(pikas, bullets):
     """ Update position of bullets and get rid of old bullets. """
     # Update bullet positions.
+
     bullets.update()
 
     # Get rid of bullets that have disappeared.
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
+    # Check for any bullets that have hit pikas.
+    # If so, get rid of the bullet and the pika.
+    collisions = pygame.sprite.groupcollide(bullets, pikas, True, True)
+
+        # pika_sound.play()
 
 def create_fleet(ai_settings, screen, ship, pikas):
     """Create a full fleet of pikas"""
@@ -120,6 +126,26 @@ def get_number_rows(ai_settings, ship_height, pika_height):
     return number_rows
 
 
-def update_pikas(pikas):
-    """ Update the position of all pikas in the fleet."""
+def check_fleet_edges(ai_settings, pikas):
+    """Respond appropriately if any pikas have reached an edge."""
+    for pika in pikas.sprites():
+        if pika.check_edges():
+            change_fleet_direction(ai_settings, pikas)
+            break
+
+
+def change_fleet_direction(ai_settings, pikas):
+    """ Drop the entire fleet and change the fleet's direction."""
+    for pika in pikas.sprites():
+        pika.rect.y += ai_settings.fleet_drop_speed
+    ai_settings.fleet_direction *= -1
+
+
+
+def update_pikas(ai_settings, pikas):
+    """
+    Check if the fleet is at an edge,
+    and then update the positions of all pikas in the fleet.
+    """
+    check_fleet_edges(ai_settings, pikas)
     pikas.update()
