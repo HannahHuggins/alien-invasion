@@ -5,16 +5,13 @@ from pika import Pika
 from settings import Settings
 import game_functions as gf
 from pygame.sprite import Group
-from bullet import Bullet
-import time
-
 
 
 def run_game():
     # Initialize game, settings, and create a screen object.
     pygame.init()
     ai_settings = Settings()
-    screen = pygame.display.set_mode((800, 500))
+    screen = pygame.display.set_mode((900, 525))
     pygame.display.set_caption("Meme invasion")
     background_image = pygame.image.load("images/space.png").convert()
 
@@ -24,6 +21,9 @@ def run_game():
     pika = Pika(ai_settings, screen)
     # Make a group to store bullets in
     bullets = Group()
+    pikas = Group()
+
+    gf.create_fleet(ai_settings, screen, ship, pikas)
 
     # Set the background color.
     # bg_color = (255,255,255)
@@ -35,7 +35,8 @@ def run_game():
         gf.check_events(ai_settings, screen, ship, pika, bullets)
         ship.update()
         gf.update_bullets(bullets)
-        gf.update_screen(ai_settings, screen, ship, pika, bullets)
+        gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets)
+        gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets)
 
         # Redraw the screen during each pass through the loop
 
