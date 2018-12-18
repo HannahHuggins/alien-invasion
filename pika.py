@@ -1,14 +1,14 @@
 import pygame
 
-class Orca():
+class Pika():
 
     def __init__(self, ai_settings, screen):
 
-        # Initialise the orca and set it's starting position
+        # Initialise the pika and set it's starting position
         self.screen = screen
         self.ai_settings = ai_settings
 
-        # Load the orca image and get it's rect
+        # Load the pika image and get it's rect
         self.image = pygame.image.load('images/try.bmp')
 
 

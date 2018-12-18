@@ -1,7 +1,7 @@
 import pygame
 import sys
 from ship import Ship
-from orca import Orca
+from pika import Pika
 from settings import Settings
 import game_functions as gf
 from pygame.sprite import Group
@@ -18,7 +18,7 @@ def run_game():
     # Make a ship
     ship = Ship(ai_settings, screen)
     # Make an orca
-    orca = Orca(ai_settings, screen)
+    pika = Pika(ai_settings, screen)
     # Make a group to store bullets in
     bullets = Group()
 
@@ -29,16 +29,16 @@ def run_game():
     while True:
         screen.blit(background_image,[0,0])
 
-        gf.check_events(ai_settings, screen, ship, orca, bullets)
+        gf.check_events(ai_settings, screen, ship, pika, bullets)
         ship.update()
         gf.update_bullets(bullets)
-        gf.update_screen(ai_settings, screen, ship, orca, bullets)
+        gf.update_screen(ai_settings, screen, ship, pika, bullets)
 
         # Redraw the screen during each pass through the loop
 
 
         ship.blitme()
-        orca.blitme()
+        pika.blitme()
 
 
         # Watch for keyboard and mouse events.

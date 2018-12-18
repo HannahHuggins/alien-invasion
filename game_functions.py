@@ -37,14 +37,14 @@ def check_events(ai_settings, screen, ship, orca, bullets):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, orca, bullets):
+def update_screen(ai_settings, screen, ship, pika, bullets):
     """ Update images on the screen and flip to the new screen"""
     # Redraw the screen during each pass through the loop.
     background_image = pygame.image.load("images/space.png").convert()
     screen.fill(ai_settings.bg_color)
     screen.blit(background_image, [0, 0])
     ship.blitme()
-    orca.blitme()
+    pika.blitme()
 
     # Make the most recently drawn screen visible.
     # pygame.display.flip()
