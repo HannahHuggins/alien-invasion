@@ -118,3 +118,8 @@ def get_number_rows(ai_settings, ship_height, pika_height):
                          (3 * pika_height) - ship_height)
     number_rows = int(available_space_y /(2 * pika_height))
     return number_rows
+
+
+def update_pikas(pikas):
+    """ Update the position of all pikas in the fleet."""
+    pikas.update()
