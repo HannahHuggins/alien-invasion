@@ -9,7 +9,7 @@ class Orca():
         self.ai_settings = ai_settings
 
         # Load the orca image and get it's rect
-        self.image = pygame.image.load('images/try.png')
+        self.image = pygame.image.load('images/try.bmp')
 
 
         self.rect = self.image.get_rect()

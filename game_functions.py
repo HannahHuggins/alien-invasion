@@ -14,6 +14,8 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
             new_bullet = Bullet(ai_settings, screen, ship)
             bullets.add(new_bullet )
 
+def fire_bullet(ai_settings, screen, ship, bullets):
+    """Fire a bullet if limit not reached yet. """
 
 def check_keyup_events(event, ship):
     """ Respond to key releases. """
@@ -38,13 +40,25 @@ def check_events(ai_settings, screen, ship, orca, bullets):
 def update_screen(ai_settings, screen, ship, orca, bullets):
     """ Update images on the screen and flip to the new screen"""
     # Redraw the screen during each pass through the loop.
+    background_image = pygame.image.load("images/space.png").convert()
     screen.fill(ai_settings.bg_color)
+    screen.blit(background_image, [0, 0])
     ship.blitme()
     orca.blitme()
 
     # Make the most recently drawn screen visible.
-    pygame.display.flip()
+    # pygame.display.flip()
 
     # Redraw all bullets behind ship and aliens.
     for bullet in bullets.sprites():
         bullet.draw_bullet()
+
+def update_bullets(bullets):
+    """ Update position of bullets and get rid of old bullets. """
+    # Update bullet positions.
+    bullets.update()
+
+    # Get rid of bullets that have disappeared.
+    for bullet in bullets.copy():
+        if bullet.rect.bottom <= 0:
+            bullets.remove(bullet)
