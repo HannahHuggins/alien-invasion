@@ -11,7 +11,6 @@ class Pika():
         # Load the pika image and get it's rect
         self.image = pygame.image.load('images/try.bmp')
 
-
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
 

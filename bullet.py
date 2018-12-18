@@ -1,5 +1,8 @@
 import pygame
+import time
+from pygame import mixer
 from pygame.sprite import Sprite
+
 
 
 class Bullet(Sprite):
@@ -21,6 +24,7 @@ class Bullet(Sprite):
 
         self.color = ai_settings.bullet_color
         self.speed_factor = ai_settings.bullet_speed_factor
+
 
     def update(self):
         """Move the bullet up the screen."""

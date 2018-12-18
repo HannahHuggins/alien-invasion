@@ -1,3 +1,5 @@
+from pygame import mixer
+
 class Settings:
     """A class to store all the settings for Alien Invasion."""
 
@@ -8,7 +10,6 @@ class Settings:
         self.screen_height = 700
         self.bg_color = (255,255,255)
 
-
         # Ship settings
         self.ship_speed_factor = 100
 
@@ -18,4 +19,6 @@ class Settings:
         self.bullet_height = 10
         self.bullet_color = 0,255,255
         self.bullets_allowed = 100
+
+
 

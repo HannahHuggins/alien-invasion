@@ -1,5 +1,6 @@
 import pygame
 
+
 class Ship():
 
     def __init__(self, ai_settings, screen):
@@ -11,7 +12,6 @@ class Ship():
         self.image = pygame.image.load('images/Playership.png')
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
-
 
         # Start each new ship at the bottom center of the screen.
         self.rect.centerx = self.screen_rect.centerx
