@@ -43,7 +43,7 @@ def check_keyup_events(event, ship):
     #     ship.moving_left = False
     #
 
-def check_events(ai_settings, screen, stats, play_button, ship, pikas, bullets):
+def check_events(ai_settings, screen, stats, sb, play_button, ship, pikas, bullets):
     """Respond to keypresses and mouse events."""
 
     for event in pygame.event.get():
@@ -57,11 +57,11 @@ def check_events(ai_settings, screen, stats, play_button, ship, pikas, bullets):
             check_keyup_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(ai_settings, screen, stats, play_button, ship, pikas, bullets,
+            check_play_button(ai_settings, screen, stats, sb, play_button, ship, pikas, bullets,
                               mouse_x, mouse_y)
 
 
-def check_play_button(ai_settings, screen, stats, play_button, ship, pikas,
+def check_play_button(ai_settings, screen, stats, sb, play_button, ship, pikas,
                       bullets, mouse_x, mouse_y):
     """Start a new game when player clicks Play game."""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
@@ -76,6 +76,12 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, pikas,
             # Reset the game stats
             stats.reset_stats()
             stats.game_active = True
+
+            # Reset the scoreboard images.
+            sb.prep_score()
+            sb.prep_high_score()
+            sb.prep_level()
+            sb.prep_ships()
 
         # Empty the list of pikas and bullets.
         pikas.empty()
@@ -141,9 +147,14 @@ def check_bullet_pikas_collision(ai_settings, screen, stats, sb,
         check_high_score(stats, sb)
 
     if len(pikas) == 0:
-        # Destroy exiting bullets, speed up game, and create new fleet.
+        # If the entire fleet is destroyed, start a new level.
         bullets.empty()
         ai_settings.increase_speed()
+
+        # Increase level.
+        stats.level += 1
+        sb.prep_level()
+
         create_fleet(ai_settings, screen, ship, pikas)
 
 
@@ -203,11 +214,14 @@ def change_fleet_direction(ai_settings, pikas):
     ai_settings.fleet_direction *= -1
 
 
-def ship_hit(ai_settings, stats, screen, ship, pikas, bullets):
+def ship_hit(ai_settings, stats, screen, sb, ship, pikas, bullets):
     """Respond to ships being hit by pikas."""
     if stats.ships_left > 0:
         # Decrement ships left.
         stats.ships_left -= 1
+
+        # Update scoreboard.
+        sb.prep_ships()
 
         # Empty the list of pikas and bullets.
         pikas.empty()
@@ -225,16 +239,16 @@ def ship_hit(ai_settings, stats, screen, ship, pikas, bullets):
         # This will make the cursor visible once the game is over.
 
 
-def check_pikas_bottom(ai_settings, stats, screen, ship, pikas, bullets):
+def check_pikas_bottom(ai_settings, stats, screen, sb, ship, pikas, bullets):
     """Check if any pikas have reached the bottom of the screen."""
     screen_rect = screen.get_rect()
     for pika in pikas.sprites():
         if pika.rect.bottom >= screen_rect.bottom:
-            ship_hit(ai_settings, stats, screen, ship, pikas, bullets)
+            ship_hit(ai_settings, stats, screen, sb, ship, pikas, bullets)
             break
 
 
-def update_pikas(ai_settings, stats, screen, ship, pikas, bullets):
+def update_pikas(ai_settings, stats, screen, sb, ship, pikas, bullets):
     """
     Check if the fleet is at an edge,
     and then update the positions of all pikas in the fleet.
@@ -244,11 +258,11 @@ def update_pikas(ai_settings, stats, screen, ship, pikas, bullets):
 
     # Look for pika-ship collisions.
     if pygame.sprite.spritecollideany(ship, pikas):
-        ship_hit(ai_settings, stats, screen, ship, pikas, bullets)
+        ship_hit(ai_settings, stats, screen, sb, ship, pikas, bullets)
         print("Ship hit!")
 
     # Look for pikas hitting the bottom of the screen.
-    check_pikas_bottom(ai_settings, stats, screen, ship, pikas, bullets)
+    check_pikas_bottom(ai_settings, stats, screen, sb, ship, pikas, bullets)
 
 
 def check_high_score(stats, sb):
