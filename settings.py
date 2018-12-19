@@ -9,7 +9,7 @@ class Settings:
         self.bg_color = (255,255,255)
 
         # Ship settings
-        self.ship_speed_factor = 10
+        # self.ship_speed_factor = 10
         self.ship_limit = 3
 
         # Bullet settings
@@ -32,8 +32,8 @@ class Settings:
 
     def initialize_dynamic_settings(self):
         """Initialize settings that change throughout the game."""
-        self.ship_speed_factor = 10
-        self.bullet_speed_factor = 50
+        self.ship_speed_factor = 20
+        self.bullet_speed_factor = 60
         self.pika_speed_factor = 1
 
         # Fleet direction of 1 represents right; -1 represents left.

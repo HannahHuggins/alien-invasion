@@ -5,6 +5,7 @@ class Ship():
 
     def __init__(self, ai_settings, screen):
         """Initialize the ship and set it's starting position."""
+        super().__init__()
         self.screen = screen
         self.ai_settings = ai_settings
 
@@ -29,7 +30,7 @@ class Ship():
         # Update the ship's center value, not the rect
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.center += self.ai_settings.ship_speed_factor
-        if self.moving_left and self.rect.left > 0:
+        elif self.moving_left and self.rect.left > 0:
             self.center -= self.ai_settings.ship_speed_factor
 
         # Update rect object from self.center.

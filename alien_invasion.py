@@ -43,7 +43,7 @@ def run_game():
 
     # Start the main loop for the game.
     while True:
-        screen.blit(background_image, [0, 0])
+        # screen.blit(background_image, [0, 0])
 
         gf.check_events(ai_settings, screen, stats, play_button, ship, pikas, bullets)
 
@@ -57,7 +57,7 @@ def run_game():
 
         # Redraw the screen during each pass through the loop
 
-        ship.blitme()
+        # ship.blitme()
         pika.blitme()
 
         # Watch for keyboard and mouse events.
@@ -66,8 +66,7 @@ def run_game():
                 sys.exit()
 
         # Make the most recently drawn screen visible.
-
-        pygame.display.flip()
+        pygame.display.update()
 
 
 run_game()
