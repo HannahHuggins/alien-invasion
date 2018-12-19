@@ -39,6 +39,9 @@ class Settings:
         # Fleet direction of 1 represents right; -1 represents left.
         self.fleet_direction = 1
 
+        # Scoring
+        self.pika_points = 20
+
     def increase_speed(self):
         """Increase speed settings."""
         self.ship_speed_factor *= self.speedup_scale

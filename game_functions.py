@@ -108,7 +108,7 @@ def update_screen(ai_settings, screen, stats, sb, ship, pikas, bullets,
         bullet.draw_bullet()
 
 
-def update_bullets(ai_settings, screen, ship, pikas, bullets):
+def update_bullets(ai_settings, screen, stats, sb, ship, pikas, bullets):
     """ Update position of bullets and get rid of old bullets. """
     # Update bullet positions.
 
@@ -119,15 +119,20 @@ def update_bullets(ai_settings, screen, ship, pikas, bullets):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
 
-    check_bullet_pikas_collision(ai_settings, screen, ship, pikas, bullets)
+    check_bullet_pikas_collision(ai_settings, screen, stats, sb,
+                                 ship, pikas, bullets)
 
 
-def check_bullet_pikas_collision(ai_settings, screen, ship, pikas, bullets):
+def check_bullet_pikas_collision(ai_settings, screen, stats, sb,
+                                 ship, pikas, bullets):
     """Respond to bullet-pika collisions."""
     # Remove any bullets and pikas that have collided.
     # Check for any bullets that have hit pikas.
     # If so, get rid of the bullet and the pika.
     collisions = pygame.sprite.groupcollide(bullets, pikas, True, True)
+    if collisions:
+        stats.score += ai_settings.pika_points
+        sb.prep_score()
 
     if len(pikas) == 0:
         # Destroy exiting bullets, speed up game, and create new fleet.
