@@ -8,13 +8,11 @@ from pygame.sprite import Group
 from pygame import mixer
 from game_stats import GameStats
 from button import Button
+from scoreboard import Scoreboard
 
 mixer.init()
-
 pika_sound = mixer.Sound('sounds/poketheme.wav')
-
 pika_sound.play()
-
 
 
 def run_game():
@@ -27,8 +25,9 @@ def run_game():
     # Make the play button.
     play_button = Button(ai_settings, screen, "Play Game")
 
-    # Create an instance to store game statistics.
+    # Create an instance to store game statistics and create a scoreboard.
     stats = GameStats(ai_settings)
+    sb = Scoreboard(ai_settings, screen, stats)
 
     background_image = pygame.image.load("images/space.png").convert()
 
@@ -42,12 +41,9 @@ def run_game():
 
     gf.create_fleet(ai_settings, screen, ship, pikas)
 
-    # Set the background color.
-    # bg_color = (255,255,255)
-
     # Start the main loop for the game.
     while True:
-        screen.blit(background_image,[0,0])
+        screen.blit(background_image, [0, 0])
 
         gf.check_events(ai_settings, screen, stats, play_button, ship, pikas, bullets)
 
@@ -56,26 +52,23 @@ def run_game():
             gf.update_bullets(ai_settings, screen, ship, pikas, bullets)
             gf.update_pikas(ai_settings, stats, screen, ship, pikas, bullets)
 
-        gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets, stats,
+        gf.update_screen(ai_settings, screen, ship, pikas, bullets, stats, sb, pika,
                          play_button)
-        # gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets)
 
         # Redraw the screen during each pass through the loop
 
         ship.blitme()
         pika.blitme()
 
-
         # Watch for keyboard and mouse events.
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-
-
-
         # Make the most recently drawn screen visible.
+
         pygame.display.flip()
+
 
 run_game()
 pika_sound.play()

@@ -3,8 +3,6 @@ from pygame.sprite import Sprite
 from pygame import mixer
 
 
-
-
 class Pika(Sprite):
 
     def __init__(self, ai_settings, screen):
@@ -31,9 +29,7 @@ class Pika(Sprite):
     def __del__(self):
         pygame.mixer.init()
         pika_sound = mixer.Sound('sounds/explosion.wav')
-        pika_sound_two = mixer.Sound('sounds/pikachutwo.wav')
         pika_sound.play()
-        # pika_sound_two.play()
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
@@ -49,5 +45,5 @@ class Pika(Sprite):
     def update(self):
         """ Move the pika right or left."""
         self.x += (self.ai_settings.pika_speed_factor *
-                        self.ai_settings.fleet_direction)
+                   self.ai_settings.fleet_direction)
         self.rect.x = self.x

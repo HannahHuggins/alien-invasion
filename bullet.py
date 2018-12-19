@@ -1,6 +1,4 @@
 import pygame
-import time
-from pygame import mixer
 from pygame.sprite import Sprite
 
 
@@ -15,7 +13,7 @@ class Bullet(Sprite):
 
         # Create a bullet rect at (0, 0) and then set correct position.
         self.rect = pygame.Rect(0, 0, ai_settings.bullet_width,
-              ai_settings.bullet_height)
+                                ai_settings.bullet_height)
         self.rect.centerx = ship.rect.centerx
         self.rect.top = ship.rect.top
 

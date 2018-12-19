@@ -2,7 +2,6 @@ import sys
 import pygame
 from bullet import Bullet
 from pygame import mixer
-from settings import Settings
 from pika import Pika
 from time import sleep
 
@@ -27,7 +26,6 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
             sound.play()
     elif event.key == pygame.K_q:
         sys.exit()
-
 
 
 def check_keyup_events(event, ship):
@@ -58,6 +56,7 @@ def check_events(ai_settings, screen, stats, play_button, ship, pikas, bullets):
             check_play_button(ai_settings, screen, stats, play_button, ship, pikas, bullets,
                               mouse_x, mouse_y)
 
+
 def check_play_button(ai_settings, screen, stats, play_button, ship, pikas,
                       bullets, mouse_x, mouse_y):
     """Start a new game when player clicks Play game."""
@@ -70,9 +69,9 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, pikas,
         pygame.mouse.set_visible(False)
 
         if play_button.rect.collidepoint(mouse_x, mouse_y):
-           # Reset the game stats
-           stats.reset_stats()
-           stats.game_active = True
+            # Reset the game stats
+            stats.reset_stats()
+            stats.game_active = True
 
         # Empty the list of pikas and bullets.
         pikas.empty()
@@ -83,11 +82,8 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, pikas,
         ship.center_ship()
 
 
-
-
-
 def update_screen(ai_settings, screen, ship, pika, pikas, bullets, stats,
-                  play_button):
+                  play_button, sb):
     """ Update images on the screen and flip to the new screen"""
     # Redraw the screen during each pass through the loop.
     background_image = pygame.image.load("images/space.png").convert()
@@ -96,6 +92,9 @@ def update_screen(ai_settings, screen, ship, pika, pikas, bullets, stats,
     ship.blitme()
     pika.blitme()
     pikas.draw(screen)
+
+    # Draw the score information.
+    sb.show_score()
 
     # Draw the play button if the game is inactive.
     if not stats.game_active:
@@ -122,6 +121,7 @@ def update_bullets(ai_settings, screen, ship, pikas, bullets):
 
     check_bullet_pikas_collision(ai_settings, screen, ship, pikas, bullets)
 
+
 def check_bullet_pikas_collision(ai_settings, screen, ship, pikas, bullets):
     """Respond to bullet-pika collisions."""
     # Remove any bullets and pikas that have collided.
@@ -134,6 +134,7 @@ def check_bullet_pikas_collision(ai_settings, screen, ship, pikas, bullets):
         bullets.empty()
         ai_settings.increase_speed()
         create_fleet(ai_settings, screen, ship, pikas)
+
 
 def create_fleet(ai_settings, screen, ship, pikas):
     """Create a full fleet of pikas"""
@@ -150,11 +151,13 @@ def create_fleet(ai_settings, screen, ship, pikas):
             create_pika(ai_settings, screen, pikas, pika_number,
                         row_number)
 
+
 def get_number_pikas_x(ai_settings, pika_width):
     """ Determine the number of pikas that fit in a row. """
     available_space_x = ai_settings.screen_width - 2 * pika_width
     number_pikas_x = int(available_space_x / (2 * pika_width))
     return number_pikas_x
+
 
 def create_pika(ai_settings, screen, pikas, pika_number, row_number):
     """ Create a pika and place it in the row."""
@@ -188,22 +191,23 @@ def change_fleet_direction(ai_settings, pikas):
         pika.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
 
+
 def ship_hit(ai_settings, stats, screen, ship, pikas, bullets):
     """Respond to ships being hit by alien."""
     if stats.ships_left > 0:
-       # Decrement ships left.
-       stats.ships_left -= 1
+        # Decrement ships left.
+        stats.ships_left -= 1
 
-       # Empty the list of pikas and bullets.
-       pikas.empty()
-       bullets.empty()
+        # Empty the list of pikas and bullets.
+        pikas.empty()
+        bullets.empty()
 
-       # Create a new fleet and center the ship.
-       create_fleet(ai_settings, screen, ship, pikas)
-       ship.center_ship()
+        # Create a new fleet and center the ship.
+        create_fleet(ai_settings, screen, ship, pikas)
+        ship.center_ship()
 
-       # Pause.
-       sleep(0.5)
+        # Pause.
+        sleep(0.5)
     else:
         stats.game__active = False
         pygame.mouse.set_visible(True)
