@@ -27,6 +27,8 @@ class Settings:
 
         # How quickly the game speeds up
         self.speedup_scale = 1.1
+        # How quickly the pika point values increase
+        self.score_scale = 1.5
 
         self.initialize_dynamic_settings()
 
@@ -43,10 +45,12 @@ class Settings:
         self.pika_points = 20
 
     def increase_speed(self):
-        """Increase speed settings."""
+        """Increase speed settings and pika point values."""
         self.ship_speed_factor *= self.speedup_scale
         self.bullet_speed_factor *= self.speedup_scale
         self.pika_speed_factor *= self.speedup_scale
+
+        self.pika_points = int(self.pika_points * self.score_scale)
 
 
 

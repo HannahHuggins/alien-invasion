@@ -135,8 +135,10 @@ def check_bullet_pikas_collision(ai_settings, screen, stats, sb,
     # If so, get rid of the bullet and the pika.
     collisions = pygame.sprite.groupcollide(bullets, pikas, True, True)
     if collisions:
-        stats.score += ai_settings.pika_points
-        sb.prep_score()
+        for pikas in collisions.values():
+            stats.score += ai_settings.pika_points * len(pikas)
+            sb.prep_score()
+        check_high_score(stats, sb)
 
     if len(pikas) == 0:
         # Destroy exiting bullets, speed up game, and create new fleet.
@@ -247,3 +249,10 @@ def update_pikas(ai_settings, stats, screen, ship, pikas, bullets):
 
     # Look for pikas hitting the bottom of the screen.
     check_pikas_bottom(ai_settings, stats, screen, ship, pikas, bullets)
+
+
+def check_high_score(stats, sb):
+    """Check to see if there's a new high score."""
+    if stats.score > stats.high_score:
+        stats.high_score = stats.score
+        sb.prep_high_score()
