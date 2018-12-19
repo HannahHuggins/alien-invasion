@@ -6,7 +6,8 @@ from settings import Settings
 import game_functions as gf
 from pygame.sprite import Group
 from pygame import mixer
-
+from game_stats import GameStats
+from button import Button
 
 mixer.init()
 
@@ -22,6 +23,13 @@ def run_game():
     ai_settings = Settings()
     screen = pygame.display.set_mode((900, 525))
     pygame.display.set_caption("Meme invasion")
+
+    # Make the play button.
+    play_button = Button(ai_settings, screen, "Play Game")
+
+    # Create an instance to store game statistics.
+    stats = GameStats(ai_settings)
+
     background_image = pygame.image.load("images/space.png").convert()
 
     # Make a ship
@@ -43,10 +51,14 @@ def run_game():
 
 
         gf.check_events(ai_settings, screen, ship, pika, bullets)
-        ship.update()
-        gf.update_bullets(ai_settings, screen, ship, pikas, bullets)
-        gf.update_pikas(ai_settings, pikas)
-        gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets)
+
+        if stats.game_active:
+            ship.update()
+            gf.update_bullets(ai_settings, screen, ship, pikas, bullets)
+            gf.update_pikas(ai_settings, stats, screen, ship, pikas, bullets)
+
+        gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets, stats,
+                         play_button)
         # gf.update_screen(ai_settings, screen, ship, pika, pikas, bullets)
 
         # Redraw the screen during each pass through the loop

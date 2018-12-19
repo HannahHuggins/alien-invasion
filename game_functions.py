@@ -4,6 +4,7 @@ from bullet import Bullet
 from pygame import mixer
 from settings import Settings
 from pika import Pika
+from time import sleep
 
 mixer.init()
 
@@ -54,7 +55,8 @@ def check_events(ai_settings, screen, ship, pika, bullets):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, pika, pikas, bullets):
+def update_screen(ai_settings, screen, ship, pika, pikas, bullets, stats,
+                  play_button):
     """ Update images on the screen and flip to the new screen"""
     # Redraw the screen during each pass through the loop.
     background_image = pygame.image.load("images/space.png").convert()
@@ -64,8 +66,12 @@ def update_screen(ai_settings, screen, ship, pika, pikas, bullets):
     pika.blitme()
     pikas.draw(screen)
 
+    # Draw the play button if the game is inactive.
+    if not stats.game_active:
+        play_button.draw_button()
+
     # Make the most recently drawn screen visible.
-    # pygame.display.flip()
+    pygame.display.flip()
 
     # Redraw all bullets behind ship and aliens.
     for bullet in bullets.sprites():
@@ -150,12 +156,47 @@ def change_fleet_direction(ai_settings, pikas):
         pika.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
 
+def ship_hit(ai_settings, stats, screen, ship, pikas, bullets):
+    """Respond to ships being hit by alien."""
+    if stats.ships_left > 0:
+       # Decrement ships left.
+       stats.ships_left -= 1
+
+       # Empty the list of pikas and bullets.
+       pikas.empty()
+       bullets.empty()
+
+       # Create a new fleet and center the ship.
+       create_fleet(ai_settings, screen, ship, pikas)
+       ship.center_ship()
+
+       # Pause.
+       sleep(0.5)
+    else:
+        stats.game__active = False
 
 
-def update_pikas(ai_settings, pikas):
+def check_pikas_bottom(ai_settings, stats, screen, ship, pikas, bullets):
+    """Check if any pikas have reached the bottom of the screen."""
+    screen_rect = screen.get_rect()
+    for pika in pikas.sprites():
+        if pika.rect.bottom >= screen_rect.bottom:
+            ship_hit(ai_settings, stats, screen, ship, pikas, bullets)
+            break
+
+
+def update_pikas(ai_settings, stats, screen, ship, pikas, bullets):
     """
     Check if the fleet is at an edge,
     and then update the positions of all pikas in the fleet.
     """
     check_fleet_edges(ai_settings, pikas)
     pikas.update()
+
+    # Look for pika-ship collisions.
+    if pygame.sprite.spritecollideany(ship, pikas):
+        ship_hit(ai_settings, stats, screen, ship, pikas, bullets)
+        print("Ship hit!")
+
+    # Look for pikas hitting the bottom of the screen.
+    check_pikas_bottom(ai_settings, stats, screen, ship, pikas, bullets)
