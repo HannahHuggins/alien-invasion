@@ -49,8 +49,7 @@ def run_game():
     while True:
         screen.blit(background_image,[0,0])
 
-
-        gf.check_events(ai_settings, screen, ship, pika, bullets)
+        gf.check_events(ai_settings, screen, stats, play_button, ship, pikas, bullets)
 
         if stats.game_active:
             ship.update()

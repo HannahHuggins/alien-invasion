@@ -41,7 +41,7 @@ def check_keyup_events(event, ship):
         ship.center -= dist
 
 
-def check_events(ai_settings, screen, ship, pika, bullets):
+def check_events(ai_settings, screen, stats, play_button, ship, pikas, bullets):
     """Respond to keypresses and mouse events."""
 
     for event in pygame.event.get():
@@ -53,6 +53,31 @@ def check_events(ai_settings, screen, ship, pika, bullets):
 
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(ai_settings, screen, stats, play_button, ship, pikas, bullets,
+                              mouse_x, mouse_y)
+
+def check_play_button(ai_settings, screen, stats, play_button, ship, pikas,
+                      bullets, mouse_x, mouse_y):
+    """Start a new game when player clicks Play game."""
+    button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+    if button_clicked and not stats.game_active:
+        if play_button.rect.collidepoint(mouse_x, mouse_y):
+           # Reset the game stats
+           stats.reset_stats()
+           stats.game_active = True
+
+        # Empty the list of pikas and bullets.
+        pikas.empty()
+        bullets.empty()
+
+        # Create a new fleet and center the ship.
+        create_fleet(ai_settings, screen, ship, pikas)
+        ship.center_ship()
+
+
+
 
 
 def update_screen(ai_settings, screen, ship, pika, pikas, bullets, stats,
