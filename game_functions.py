@@ -63,6 +63,12 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, pikas,
     """Start a new game when player clicks Play game."""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked and not stats.game_active:
+        # Reset the game settings.
+        ai_settings.initialize_dynamic_settings()
+
+        # Hide the mouse cursor.
+        pygame.mouse.set_visible(False)
+
         if play_button.rect.collidepoint(mouse_x, mouse_y):
            # Reset the game stats
            stats.reset_stats()
@@ -124,8 +130,9 @@ def check_bullet_pikas_collision(ai_settings, screen, ship, pikas, bullets):
     collisions = pygame.sprite.groupcollide(bullets, pikas, True, True)
 
     if len(pikas) == 0:
-        # Destroy exiting bullets and create new fleet.
+        # Destroy exiting bullets, speed up game, and create new fleet.
         bullets.empty()
+        ai_settings.increase_speed()
         create_fleet(ai_settings, screen, ship, pikas)
 
 def create_fleet(ai_settings, screen, ship, pikas):
@@ -199,6 +206,8 @@ def ship_hit(ai_settings, stats, screen, ship, pikas, bullets):
        sleep(0.5)
     else:
         stats.game__active = False
+        pygame.mouse.set_visible(True)
+        # This will make the cursor visible once the game is over.
 
 
 def check_pikas_bottom(ai_settings, stats, screen, ship, pikas, bullets):
