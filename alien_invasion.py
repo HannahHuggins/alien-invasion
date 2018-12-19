@@ -52,8 +52,8 @@ def run_game():
             gf.update_bullets(ai_settings, screen, ship, pikas, bullets)
             gf.update_pikas(ai_settings, stats, screen, ship, pikas, bullets)
 
-        gf.update_screen(ai_settings, screen, ship, pikas, bullets, stats, sb, pika,
-                         play_button)
+        gf.update_screen(ai_settings, screen, stats, sb, ship, pikas, bullets,
+                         play_button, pika)
 
         # Redraw the screen during each pass through the loop
 

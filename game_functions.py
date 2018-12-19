@@ -82,8 +82,8 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, pikas,
         ship.center_ship()
 
 
-def update_screen(ai_settings, screen, ship, pika, pikas, bullets, stats,
-                  play_button, sb):
+def update_screen(ai_settings, screen, stats, sb, ship, pikas, bullets,
+                  play_button, pika):
     """ Update images on the screen and flip to the new screen"""
     # Redraw the screen during each pass through the loop.
     background_image = pygame.image.load("images/space.png").convert()
@@ -103,7 +103,7 @@ def update_screen(ai_settings, screen, ship, pika, pikas, bullets, stats,
     # Make the most recently drawn screen visible.
     pygame.display.flip()
 
-    # Redraw all bullets behind ship and aliens.
+    # Redraw all bullets behind ship and pikas.
     for bullet in bullets.sprites():
         bullet.draw_bullet()
 
@@ -193,7 +193,7 @@ def change_fleet_direction(ai_settings, pikas):
 
 
 def ship_hit(ai_settings, stats, screen, ship, pikas, bullets):
-    """Respond to ships being hit by alien."""
+    """Respond to ships being hit by pikas."""
     if stats.ships_left > 0:
         # Decrement ships left.
         stats.ships_left -= 1

@@ -1,5 +1,5 @@
 class Settings:
-    """A class to store all the settings for Alien Invasion."""
+    """A class to store all the settings for Meme Invasion."""
 
     def __init__(self):
         """Initialize the game's static settings."""
